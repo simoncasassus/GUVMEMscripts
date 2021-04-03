@@ -1,0 +1,20 @@
+workdir=$1
+robustparam=$2
+
+echo $workdir
+echo "RUNNING RESTORE"
+
+rsync -va ./casarestore_4guvmem.py $workdir 
+cd $workdir
+#casa --log2term --nogui -c casarestore_4guvmem.py  $robustparam
+casa  --nogui -c casarestore_4guvmem.py  $robustparam
+cd ../
+
+
+
+
+
+
+
+
+
