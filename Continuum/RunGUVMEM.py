@@ -28,7 +28,7 @@ def docanvas(sourcems, nxin, nyin, cellsize, robustparam):
     
     print( "noise = ",noise)
     
-    him_canvas['NOISE'] = noise #* 10.
+    #him_canvas['NOISE'] = noise #* 10.
     him_canvas['RADESYS'] = 'FK5' 
     him_canvas['EQUINOX'] = '2000' 
     
