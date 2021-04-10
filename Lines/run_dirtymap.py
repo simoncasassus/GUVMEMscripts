@@ -28,7 +28,17 @@ print( "dirty map for >>",filenamems,"<<<")
 listobs(vis=filenamems,listfile='list_'+os.path.basename(filenamems)+'.txt',overwrite=True)
 
 FileCanvasCube_tag=re.sub('.fits','',FileCanvasCube)
-os.system('rm -rf '+FileCanvasCube_tag+'*')
+
+
+#os.system('rm -rf '+FileCanvasCube_tag+'*')
+os.system('rm -rf '+FileCanvasCube_tag+".psf")
+os.system('rm -rf '+FileCanvasCube_tag+".sumwt")
+os.system('rm -rf '+FileCanvasCube_tag+".pb")
+os.system('rm -rf '+FileCanvasCube_tag+".residual")
+os.system('rm -rf '+FileCanvasCube_tag+".model")
+os.system('rm -rf '+FileCanvasCube_tag+".image")
+os.system('rm -rf '+FileCanvasCube_tag+".fits")
+
 
 
 #tclean(vis=prefix+'_COcube.ms.contsub',
