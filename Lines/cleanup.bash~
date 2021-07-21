@@ -1,0 +1,7 @@
+        os.system("rm -rf clean_channel*")
+        os.system("rm -rf channel_*")
+
+
+    if CleanUp:
+        os.system("rm -rf mem_lS*")
+        os.system("rm -rf casa-*.log")

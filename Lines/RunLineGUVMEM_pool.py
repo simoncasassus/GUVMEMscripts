@@ -366,7 +366,7 @@ def exec_cuberun(sourcems, cellsize, nxin, nyin, lbdaS=0.0, lbdaL=0.0, MakeCanva
 
     if CleanUpChannels:
         os.system("rm -rf clean_channel*")
-        os.system("rm -rf chanel_*")
+        os.system("rm -rf channel_*")
 
 
     if CleanUp:
