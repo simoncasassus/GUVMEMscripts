@@ -68,8 +68,12 @@ def exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=False,
         sys.exit("recompile UVMEM for L1")
         path_to_guvmem='/home/simon/bin/gpuvmem_L1/bin/gpuvmem'
         masterlabel+="_L1"
+    elif UVtaper:
+        path_to_guvmem='/home/simon/bin/gpuvmem_uvtaper/bin/gpuvmem'
+        masterlabel+="_uvtaper"
     else:
         path_to_guvmem='/home/simon/bin/gpuvmem-dev/gpuvmem/bin/gpuvmem'
+        path_to_guvmem='/home/simon/bin/gpuvmem/bin/gpuvmem'
 
     if PositivDefinit:
         positivflag=''
