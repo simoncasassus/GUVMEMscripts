@@ -5,26 +5,28 @@ from astropy.io import fits
 import matplotlib.pyplot as plt
 import numpy as np
 
-import RunGUVMEM
+HOME=os.environ.get('HOME')
+include_path=HOME+'/common/python/include/'
+sys.path.append(include_path)
 
 
-print( "sys.argv",sys.argv)
+import GUVMEMscripts.Continuum.RunGUVMEM  as RunGUVMEM
 
-sourcems =  '/home/simon/V4046Sgr/data/V4046Sgr_cont_self.ms'
 
-cellsize='0.004arcsec'
-nxin=2048
-nyin=2048
-nxin=4096
-nyin=4096
-nxin=1024
-nyin=1024
+
+sourcems =  '/strelka_ssd/simon/PDS70_red/PDS70_SB16_cont_self.ms'
+#sourcems =  '/strelka_ssd/simon/PDS70_red/PDS70_SB16_cont_self_1datacol.ms'
+#sourcems =  '/strelka_ssd/simon/PDS70_red/PDS70_SB16_cont.ms'
+
+cellsize='0.02arcsec'
+nxin=512
+nyin=512
 #nxin=8192
 #nyin=8192
 
 robustparam='0.0'
 
-#RunGUVMEM.docanvas(sourcems,nxin, nyin, cellsize,robustparam)
+RunGUVMEM.docanvas(sourcems,nxin, nyin, cellsize,robustparam)
 
 #######################################################################
 
@@ -33,12 +35,14 @@ robustparam='0.0'
 
 
 graphic_cards="-G 2,3,4,5"
+graphic_cards="-G 0"
 
 # chi2
 
-#RunGUVMEM.exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=False,  wAlpha=False, graphic_cards=graphic_cards,PrintImages=True)
 
-#RunGUVMEM.exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=True,  wAlpha=False, graphic_cards=graphic_cards,PrintImages=False,robustparam='2.0',XtraNameTag='')
+RunGUVMEM.exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=True,  wAlpha=False, graphic_cards=graphic_cards,PrintImages=False,robustparam=robustparam,noisecut=1.03,GridRobust=robustparam,XtraNameTag='')
+
+sys.exit()
 
 #RunGUVMEM.exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=False,  wAlpha=False, graphic_cards=graphic_cards,PrintImages=False,robustparam='0.0',XtraNameTag='')
 

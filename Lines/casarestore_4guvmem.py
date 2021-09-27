@@ -44,6 +44,7 @@ tclean(vis=residual_ms,
        cyclefactor=1,
        deconvolver='multiscale',
        weighting='briggs',
+       datacolumn='data',
        nterms=1)
        #restoringbeam="",
        #threshold="0.0uJy"
