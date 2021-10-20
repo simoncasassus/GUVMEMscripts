@@ -37,7 +37,10 @@ sub wanted {
 	($abasename =~ /^clean_channel.*/) |
 	($abasename =~ /^channel.*\.ms$/) |
 	($abasename =~ /^list_channel.*/) |
-	($abasename =~ /^mem_lS.*chan\d+$/) |
+	($abasename =~ /^mem_l.*chan_?\d+$/) |
+	($abasename =~ /^I_nu_0_\d+\.fits$/) |
+	($abasename =~ /^alpha_\d+\.fits$/) |
+	($abasename =~ /^out_res_ms$/) |
 	($fullfilename =~ /.*uvmem.*casa.*.log$/) )
     {
 	if ($args =~ /l/) {
