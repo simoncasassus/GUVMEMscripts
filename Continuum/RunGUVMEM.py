@@ -87,8 +87,9 @@ def exec_arun(sourcems, lbdaS=0.0, lbdaL=0.0, MINPIX=0., DoL1=False, Grid=False,
     workdir="mem"+masterlabel
 
     if DoMask:
-        maskname='mask_channel_'+str(ichan)+'.fits'
-
+        maskname=DoMask
+        workdir+="_masked"
+        
     if DoGUVMEMRUN:
         os.system("rm -rf  "+workdir)
         os.system("mkdir "+workdir)
