@@ -13,19 +13,20 @@ import re
 
 #python pyra_dirty_maps.py residual_ms file_pyra_dirty weighting robust side cell
 
-residual_ms = "_ph0_residuals.ms"  #input
-model_fits = "_ph0.fits"  # input
-weighting="briggs"
+residual_ms = "out_res_ms"  #input
+model_fits = "mod_out.fits"  # input
+weighting = "briggs"
 #weighting = "natural"
-weighting = "uniform"
-robustparam = 0.
+#weighting = "uniform"
+robustparam = 2.
 if weighting == 'briggs':
     fileout = 'restored_pyra_' + weighting + '_r' + str(robustparam) + '.fits'
-    fileresiduals = residual_ms + "_" + weighting+ '_r' + str(robustparam) +".img.pyra.fits"
+    fileresiduals = residual_ms + "_" + weighting + '_r' + str(
+        robustparam) + ".img.pyra.fits"
 else:
     fileout = 'restored_pyra_' + weighting + '.fits'
-    fileresiduals = residual_ms + "_" + weighting+".img.pyra.fits"
-    
+    fileresiduals = residual_ms + "_" + weighting + ".img.pyra.fits"
+
 from astropy.convolution import interpolate_replace_nans
 from astropy.convolution import convolve as astropy_convolve
 from scipy.signal import convolve as scipy_convolve
