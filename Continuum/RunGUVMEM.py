@@ -10,7 +10,7 @@ import re
 load_path_4scripts = os.environ['HOME']+'/common/python/include/GUVMEMscripts/Continuum/'
 
 
-def docanvas(sourcems, nxin, nyin, cellsize, robustparam, NoiseFromTcleanResiduals=False,ManualNoise=False):
+def docanvas(sourcems, nxin, nyin, cellsize, robustparam, NoiseFromTcleanResiduals=False,ManualNoise=False,NoiseFactor=False):
 
     #fields='0'  # no los pesca 
     os.system('casa --log2term --nogui -c '+load_path_4scripts+'make_canvas.py'+' '+sourcems+' '+cellsize+' '+str(nxin)+' '+str(nyin)+' '+robustparam)
@@ -32,6 +32,9 @@ def docanvas(sourcems, nxin, nyin, cellsize, robustparam, NoiseFromTcleanResidua
         him_canvas['NOISE'] = noise
     elif NoiseFromTcleanResiduals:
         him_canvas['NOISE'] = noise
+        if NoiseFactor:
+            him_canvas['NOISE'] = NoiseFactor*noise
+            
     
     him_canvas['RADESYS'] = 'FK5' 
     him_canvas['EQUINOX'] = '2000' 
