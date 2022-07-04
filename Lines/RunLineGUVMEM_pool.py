@@ -80,7 +80,7 @@ def execute_1chan(atask):
     else:
         printflag=""
 
-    Dev=True
+    Dev=False
     if UVtaper:
         path_to_guvmem='/home/simon/bin/gpuvmem-dev_uvtaper/gpuvmem/bin/gpuvmem'
     elif Dev:
