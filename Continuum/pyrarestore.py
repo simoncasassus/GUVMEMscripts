@@ -188,7 +188,7 @@ side = head_model['NAXIS1']
 
 print("loading residual ms")
 x = DaskMS(input_name=residual_ms)
-dataset = x.read(datacolumn='DATA')
+dataset = x.read(data_column='DATA', calculate_psf=True)
 dataset.field.mean_ref_dir
 dataset.psf[0].sigma
 

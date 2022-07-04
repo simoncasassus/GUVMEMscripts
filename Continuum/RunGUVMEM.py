@@ -58,6 +58,7 @@ def exec_arun(sourcems,
               lbdaS=0.0,
               lbdaL=0.0,
               MINPIX=0.,
+              defaultspecindex=3.0,
               DoL1=False,
               Grid=False,
               wAlpha=False,
@@ -93,7 +94,7 @@ def exec_arun(sourcems,
     else:
         reffreq = ''
 
-    defaultvalues = str(MINPIX) + ',3.0'
+    defaultvalues = str(MINPIX) + ','+str(defaultspecindex)
 
     if PrintImages:
         printflag = "--print-images "
