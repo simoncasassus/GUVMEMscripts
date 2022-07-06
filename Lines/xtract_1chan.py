@@ -68,12 +68,12 @@ if float(genclean) > 0:
            cell=cellsizein,
            robust=float(robustparam),
            scales = [0,10,30,90], 
-           cyclefactor=1,
+           #cyclefactor=1,
            deconvolver='multiscale',
-           weighting='briggs',
-           nterms=1,
+           weighting='briggs')
+           #nterms=1,
            #restoringbeam="",
-           threshold="0.0uJy")
+           #threshold="0.0uJy")
 
 
 
