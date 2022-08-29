@@ -6,37 +6,34 @@ import os
 
 filenamems=sys.argv[1]
 print( "xtract_1channel filenamems ",filenamems)
-fields=sys.argv[2]
-print( "xtract_1channel fields ",fields,"\n")
-spws=sys.argv[3]
+spws=sys.argv[2]
 print( "xtract_1channel spws ",spws,"\n")
-channel=sys.argv[4]
+channel=sys.argv[3]
 print( "xtract_1channel channel ",channel,"\n")
-cellsizein=sys.argv[5]
+cellsizein=sys.argv[4]
 print( "xtract_1channel cellsize ",cellsizein,"\n")
-nxin=sys.argv[6]
+nxin=sys.argv[5]
 print( "xtract_1channel nxin ",nxin,"\n")
-nyin=sys.argv[7]
+nyin=sys.argv[6]
 print( "xtract_1channel nyin ",nyin,"\n")
-robustparam=sys.argv[8]
+robustparam=sys.argv[7]
 print( "xtract_1channel robustparam ",robustparam,"\n")
-genclean=sys.argv[9]
+genclean=sys.argv[8]
 print( "xtract_1channel genclean ",genclean,"\n")
-genchannelms=sys.argv[10]
+genchannelms=sys.argv[9]
 print( "xtract_1channel genchannelms ",genchannelms,"\n")
+datacolumn=sys.argv[10]
+print( "datacolumn ",datacolumn,"\n")
 
 
 outputms='channel_'+str(channel)+'.ms'
 
 
-print( "vis="+filenamems+", field="+fields+", outputvis="+outputms+"datacolumn='data',nchan=1, start=",channel,"\n")
-
-#sys.exit()
 
 if (float(genchannelms) > 0):
 
     os.system('rm -rf '+outputms)
-    mstransform(vis=filenamems, field=fields, outputvis=outputms, spw=str(spws)+':'+str(channel),datacolumn='data') 
+    mstransform(vis=filenamems, outputvis=outputms, spw=str(spws)+':'+str(channel),datacolumn=datacolumn) 
 
 
 

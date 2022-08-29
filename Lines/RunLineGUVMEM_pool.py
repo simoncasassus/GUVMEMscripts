@@ -51,7 +51,6 @@ def execute_1chan(atask):
     card = atask['card']
     masterlabel = atask['masterlabel']
     Extract_Channel = atask['options']['Extract_Channel']
-    fields = atask['options']['fields']
     spws = atask['options']['spws']
     cellsize = atask['options']['cellsize']
     nxin = atask['options']['nxin']
@@ -189,7 +188,6 @@ def exec_cuberun(sourcems,
                  MaxNiter=80,
                  XtraNameTag='',
                  spws='0',
-                 fields='0',
                  nchan1=0,
                  nchan2=-1,
                  Extract_Channel=True,
@@ -198,6 +196,7 @@ def exec_cuberun(sourcems,
                  CleanUp=False,
                  DoGUVMEMRUN=True,
                  DoRestore=True,
+                 datacolumn='corrected',
                  robustparam='1.0',
                  cards=['0', '1', '2', '3', '4', '5'],
                  noisecut=2.,
@@ -260,20 +259,20 @@ def exec_cuberun(sourcems,
             genchannelms = 1
             genclean = 0
             os.system('casa --log2term --nogui -c ' + load_path_4scripts +
-                      'xtract_1chan.py' + ' ' + sourcems + ' ' + fields + ' ' +
+                      'xtract_1chan.py' + ' ' + sourcems + ' ' +
                       str(spws) + ' ' + str(ichan) + ' ' + cellsize + ' ' +
                       str(nxin) + ' ' + str(nyin) + ' ' + robustparam + ' ' +
-                      str(genclean) + ' ' + str(genchannelms))
+                      str(genclean) + ' ' + str(genchannelms)+' '+datacolumn)
 
     if Gen_ImageCanvas:
         for ichan in (nchan1, nchan2):
             genchannelms = 0
             genclean = 1
             os.system('casa --log2term --nogui -c ' + load_path_4scripts +
-                      'xtract_1chan.py' + ' ' + sourcems + ' ' + fields + ' ' +
+                      'xtract_1chan.py' + ' ' + sourcems + ' ' +
                       str(spws) + ' ' + str(ichan) + ' ' + cellsize + ' ' +
                       str(nxin) + ' ' + str(nyin) + ' ' + robustparam + ' ' +
-                      str(genclean) + ' ' + str(genchannelms))
+                      str(genclean) + ' ' + str(genchannelms)+' '+datacolumn)
 
             data_canvas_1chan = fits.open('clean_channel_' + str(ichan) +
                                           '.fits')
@@ -311,7 +310,6 @@ def exec_cuberun(sourcems,
         'masterlabel': masterlabel,
         'options': {
             'Extract_Channel': Extract_Channel,
-            'fields': fields,
             'spws': spws,
             'cellsize': cellsize,
             'nxin': nxin,
