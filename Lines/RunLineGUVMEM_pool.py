@@ -69,6 +69,7 @@ def execute_1chan(atask):
     noisecut = atask['options']['noisecut']
     DoMask = atask['options']['DoMask']
     UVtaper = atask['options']['UVtaper']
+    listchannels = atask['options']['listchannels']
     manual_noise = atask['options']['manual_noise']
     prior = 0
     eta = -1.0
@@ -107,8 +108,13 @@ def execute_1chan(atask):
     workdir = "mem" + masterlabel + "_chan" + str(ichan)
 
     if DoGUVMEMRUN:
-        os.system("rm -rf " + workdir)
-        os.system("mkdir " + workdir)
+        if listchannels is not None:
+            if ichan in listchannels:
+                print("ichan ",str(ichan)," is in listchannels")
+                os.system("rm -rf " + workdir)
+                os.system("mkdir " + workdir)
+            else:
+                DoGUVMEMRUN = False
 
     graphic_card = "-G " + card
 
@@ -116,6 +122,9 @@ def execute_1chan(atask):
 
     if DoMask:
         maskname = 'mask_channel_' + str(ichan) + '.fits'
+        if DoGUVMEMRUN:
+            print("rsync -va " + maskname + " " + workdir)
+            os.system("rsync -va " + maskname + " " + workdir)
 
     if DoGUVMEMRUN:
         command = path_to_guvmem + "  -X 16 -Y 16 -V 256 " + dogrid + " -i " + channelms + " -o " + workdir + "/out_res_ms --noise_cut " + str(
@@ -150,6 +159,13 @@ def execute_1chan(atask):
         #    os.system('rsync -va mod_in_0.fits '+workdir)
 
     if DoRestore:
+        if listchannels is not None:
+            if ichan in listchannels:
+                print("Restore: ichan ",str(ichan)," is in listchannels")
+            else:
+                DoRestore = False
+
+    if DoRestore:
         os.system("bash " + load_path_4scripts + "exec_restore.bash " +
                   workdir + " " + robustparam + " " + load_path_4scripts)
 
@@ -169,6 +185,8 @@ def execute_1chan(atask):
     beam = [bmaj, bmin, bpa]
 
     passresult = [ichan, mod_out_im, restored_im, residual_im, beam]
+    print("<<<<<<<<<<< done execute_1chan")
+
     return passresult
 
 
@@ -201,6 +219,7 @@ def exec_cuberun(sourcems,
                  cards=['0', '1', '2', '3', '4', '5'],
                  noisecut=2.,
                  manual_noise=None,
+                 listchannels=None,
                  DoMask=False,
                  UVtaper=False):
 
@@ -259,20 +278,22 @@ def exec_cuberun(sourcems,
             genchannelms = 1
             genclean = 0
             os.system('casa --log2term --nogui -c ' + load_path_4scripts +
-                      'xtract_1chan.py' + ' ' + sourcems + ' ' +
-                      str(spws) + ' ' + str(ichan) + ' ' + cellsize + ' ' +
-                      str(nxin) + ' ' + str(nyin) + ' ' + robustparam + ' ' +
-                      str(genclean) + ' ' + str(genchannelms)+' '+datacolumn)
+                      'xtract_1chan.py' + ' ' + sourcems + ' ' + str(spws) +
+                      ' ' + str(ichan) + ' ' + cellsize + ' ' + str(nxin) +
+                      ' ' + str(nyin) + ' ' + robustparam + ' ' +
+                      str(genclean) + ' ' + str(genchannelms) + ' ' +
+                      datacolumn)
 
     if Gen_ImageCanvas:
         for ichan in (nchan1, nchan2):
             genchannelms = 0
             genclean = 1
             os.system('casa --log2term --nogui -c ' + load_path_4scripts +
-                      'xtract_1chan.py' + ' ' + sourcems + ' ' +
-                      str(spws) + ' ' + str(ichan) + ' ' + cellsize + ' ' +
-                      str(nxin) + ' ' + str(nyin) + ' ' + robustparam + ' ' +
-                      str(genclean) + ' ' + str(genchannelms)+' '+datacolumn)
+                      'xtract_1chan.py' + ' ' + sourcems + ' ' + str(spws) +
+                      ' ' + str(ichan) + ' ' + cellsize + ' ' + str(nxin) +
+                      ' ' + str(nyin) + ' ' + robustparam + ' ' +
+                      str(genclean) + ' ' + str(genchannelms) + ' ' +
+                      datacolumn)
 
             data_canvas_1chan = fits.open('clean_channel_' + str(ichan) +
                                           '.fits')
@@ -328,6 +349,7 @@ def exec_cuberun(sourcems,
             'DoMask': DoMask,
             'UVtaper': UVtaper,
             'DoRestore': DoRestore,
+            'listchannels': listchannels,
             'noisecut': noisecut
         }
     }
@@ -368,13 +390,18 @@ def exec_cuberun(sourcems,
 
             tasks.append(atask)
 
-        with Pool(ncards) as pool:
-            #passpoolresults = list(tqdm(pool.imap(execute_1chan, tasks), total=len(tasks)))
-            passpoolresults = list(pool.imap(execute_1chan, tasks))
-            pool.close()
-            pool.join()
-            print('Done whole pool')
-
+        if ncards > 1:
+            print("start pool")
+            with Pool(ncards) as pool:
+                #passpoolresults = list(tqdm(pool.imap(execute_1chan, tasks), total=len(tasks)))
+                passpoolresults = list(pool.imap(execute_1chan, tasks))
+                pool.close()
+                pool.join()
+                print('Done whole pool')
+        else:
+            passresult = execute_1chan(tasks[0])
+            passpoolresults = [passresult]
+            
         for acardresult in passpoolresults:
             if not acardresult:
                 continue
