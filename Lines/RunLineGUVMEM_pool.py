@@ -115,6 +115,9 @@ def execute_1chan(atask):
                 os.system("mkdir " + workdir)
             else:
                 DoGUVMEMRUN = False
+        else:
+            os.system("rm -rf " + workdir)
+            os.system("mkdir " + workdir)
 
     graphic_card = "-G " + card
 
