@@ -172,24 +172,28 @@ def execute_1chan(atask):
         os.system("bash " + load_path_4scripts + "exec_restore.bash " +
                   workdir + " " + robustparam + " " + load_path_4scripts)
 
-    mod_out_hdu = fits.open(workdir + '/mod_out.fits')
-    mod_out_im = mod_out_hdu[0].data
+    if os.path.isdir(workdir):
+        
+        mod_out_hdu = fits.open(workdir + '/mod_out.fits')
+        mod_out_im = mod_out_hdu[0].data
 
-    restored_hdu = fits.open(workdir + '/restored.fits')
-    restored_im = restored_hdu[0].data
+        restored_hdu = fits.open(workdir + '/restored.fits')
+        restored_im = restored_hdu[0].data
 
-    residual_hdu = fits.open(workdir + '/out_res_ms.img.image.fits')
-    residual_im = residual_hdu[0].data
-    residual_h = residual_hdu[0].header
+        residual_hdu = fits.open(workdir + '/out_res_ms.img.image.fits')
+        residual_im = residual_hdu[0].data
+        residual_h = residual_hdu[0].header
 
-    bmaj = residual_h['BMAJ'] * 3600.
-    bmin = residual_h['BMIN'] * 3600.
-    bpa = residual_h['BPA']
-    beam = [bmaj, bmin, bpa]
+        bmaj = residual_h['BMAJ'] * 3600.
+        bmin = residual_h['BMIN'] * 3600.
+        bpa = residual_h['BPA']
+        beam = [bmaj, bmin, bpa]
 
-    passresult = [ichan, mod_out_im, restored_im, residual_im, beam]
-    print("<<<<<<<<<<< done execute_1chan")
-
+        passresult = [ichan, mod_out_im, restored_im, residual_im, beam]
+        print("<<<<<<<<<<< done execute_1chan")
+    else:
+        passresult = False
+        
     return passresult
 
 
