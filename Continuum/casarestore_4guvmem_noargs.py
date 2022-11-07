@@ -1,12 +1,12 @@
 #casa --log2term --nogui -c casarestore_4guvmem.py
 import os
 
-residual_ms = "_ph0_residuals.ms" #input
-model_fits = "_ph0.fits"  # input 
+residual_ms = "out_res_ms" #input
+model_fits = "mod_out.fits"  # input 
 restored = "restored"  #output
 weight="briggs" # "briggs"
 polarization="I" 
-robustparam=0.3
+robustparam=0.
 print("Restoring with robustparam ",robustparam)
 
 ######################################################################

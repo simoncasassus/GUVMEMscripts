@@ -28,10 +28,12 @@ print( "auto clean for: ",sourcems)
 os.system('rm -rf autoclean.*')
 tclean(vis=sourcems,
        imagename='autoclean',
+       gridder='standard',
        specmode='mfs',
-       niter=1000,  
+       niter=0,  
        interactive=False,
        cell=cellsize,
+       deconvolver='hogbom',
        imsize=[int(nxin),int(nyin)],
        robust=float(robustparam),
        weighting='briggs')
