@@ -1,15 +1,16 @@
 #casa --log2term --nogui -c casarestore_gen.py
 import os
 
-robustparam=0.0
+robustparam=1.0
+tag="_p0"
 
-residual_ms = "_p1_residuals.ms" #input
-model_fits = "_p1.fits"  # input 
-restored = "_p1.restored_r"+str(robustparam)  #output
+residual_ms = tag+"_residuals.ms" #input
+model_fits = tag+".fits"  # input 
+restored = tag+".restored_r"+str(robustparam)  #output
 weight="briggs" # "briggs"
 polarization="I" 
 
-residual_image=residual_ms+"_r"+str(robustparam)+".img"
+residual_image=tag+".residuals_r"+str(robustparam)
 print("Restoring with robustparam ",robustparam)
 
 ######################################################################
@@ -49,7 +50,7 @@ tclean(vis=residual_ms,
        #threshold="0.0uJy"
 
 
-exportfits(imagename=residual_image+".image", fitsimage=residual_image+".image.fits")
+exportfits(imagename=residual_image+".image", fitsimage=residual_image+".fits")
 
 ia.open(infile=residual_image+".image")
 rbeam=ia.restoringbeam()
@@ -76,7 +77,7 @@ ia.open(infile="convolved_mod_out.fits")
 ia.setrestoringbeam(beam=rbeam)
 ia.done()
 
-imagearr=["convolved_mod_out.fits",residual_image+".image.fits"]
+imagearr=["convolved_mod_out.fits",residual_image+".fits"]
 
 #immath(imagename=imagearr,expr=" (IM0 * convert_factor  + IM1) ", outfile=restored)
 

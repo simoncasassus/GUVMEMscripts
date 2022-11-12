@@ -88,13 +88,15 @@ def exec_arun(sourcems,
         dogrid = ''
         masterlabel = "_lS" + str(lbdaS) + "_lL" + str(lbdaL) + "_nogrid"
 
+    hdu_canvas = fits.open('mod_in_0.fits')
+    hdr_canvas = hdu_canvas[0].header
+    reffreq = '-F ' + str(hdr_canvas['CRVAL3'])
+
     if wAlpha:
         masterlabel += "_wAlpha"
-        reffreq = '-F 225E9'
-    else:
-        reffreq = ''
+        sys.exit("recompile uvmem for alpha image")
 
-    defaultvalues = str(MINPIX) + ','+str(defaultspecindex)
+    defaultvalues = str(MINPIX) + ',' + str(defaultspecindex)
 
     if PrintImages:
         printflag = "--print-images "
