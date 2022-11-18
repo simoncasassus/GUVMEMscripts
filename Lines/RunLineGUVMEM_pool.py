@@ -217,6 +217,7 @@ def exec_cuberun(sourcems,
                  nchan2=-1,
                  Extract_Channel=True,
                  Gen_ImageCanvas=True,
+                 refchan=0,
                  CleanUpChannels=False,
                  CleanUp=False,
                  DoGUVMEMRUN=True,
@@ -292,7 +293,9 @@ def exec_cuberun(sourcems,
                       datacolumn)
 
     if Gen_ImageCanvas:
-        for ichan in (nchan1, nchan2):
+        #for ichan in (int((nchan1+nchan2/2)),):
+        for ichan in (refchan,):
+            #nchan1, nchan2):
             genchannelms = 0
             genclean = 1
             os.system('casa --log2term --nogui -c ' + load_path_4scripts +
