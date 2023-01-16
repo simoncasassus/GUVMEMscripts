@@ -33,7 +33,9 @@ python  master_line_pool.py
 
 masks:
 
-In ds9 use Regions->shape->ellipse, use shift + drag on corners of rectangle to rotate,  and save regions for each channel separatedly 
+In ds9
+Edit->Regions
+Regions->shape->ellipse, use shift + drag on corners of rectangle to rotate,  and save regions for each channel separatedly 
 
 mv ds9.reg  ds9_1.reg
 conda install -c conda-forge pyregion

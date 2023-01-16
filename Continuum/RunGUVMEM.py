@@ -92,9 +92,8 @@ def exec_arun(sourcems,
     hdr_canvas = hdu_canvas[0].header
     reffreq = '-F ' + str(hdr_canvas['CRVAL3'])
 
-    if wAlpha:
-        masterlabel += "_wAlpha"
-        sys.exit("recompile uvmem for alpha image")
+
+        
 
     defaultvalues = str(MINPIX) + ',' + str(defaultspecindex)
 
@@ -115,8 +114,10 @@ def exec_arun(sourcems,
     elif UVtaper:
         path_to_guvmem = '/home/simon/bin/gpuvmem_uvtaper/bin/gpuvmem'
         masterlabel += "_uvtaper"
+    elif wAlpha:
+        masterlabel += "_wAlpha"
+        path_to_guvmem = '/home/simon/bin/gpuvmem_wAlpha/bin/gpuvmem'
     else:
-        path_to_guvmem = '/home/simon/bin/gpuvmem-dev/gpuvmem/bin/gpuvmem'
         path_to_guvmem = '/home/simon/bin/gpuvmem/bin/gpuvmem'
 
     if PositivDefinit:
