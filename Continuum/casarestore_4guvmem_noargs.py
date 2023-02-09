@@ -1,15 +1,15 @@
-#casa --log2term --nogui -c casarestore_4guvmem.py
+#casa --log2term --nogui -c casarestore_4guvmem_noargs.py
 import os
 
 residual_ms = "out_res_ms" #input
 model_fits = "mod_out.fits"  # input 
-restored = "restored"  #output
+robustparam=0.
 weight="briggs" # "briggs"
 polarization="I" 
-robustparam=0.
 print("Restoring with robustparam ",robustparam)
 
 ######################################################################
+restored = "restored_"+str(robustparam)  #output
 residual_image=residual_ms+"_"+str(robustparam)+".img"
 
 os.system("rm -rf *.log *.last "+residual_image+".* mod_out convolved_mod_out convolved_mod_out.fits "+restored+" "+restored+".fits")
