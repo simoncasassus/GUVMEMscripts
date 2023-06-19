@@ -57,11 +57,13 @@ def docanvas(sourcems,
 def exec_arun(sourcems,
               lbdaS=0.0,
               lbdaL=0.0,
+              lbdaTSValpha=0.0,
               MINPIX=0.,
               defaultspecindex=3.0,
+              specindexnoise=1.,
+              DoSpecIndexMap=False,
               DoL1=False,
               Grid=False,
-              wAlpha=False,
               graphic_cards="-M 2,3,4,5",
               robustparam='2.0',
               PrintImages=False,
@@ -79,21 +81,20 @@ def exec_arun(sourcems,
               SaveModel=True):
     # prior = 0
     eta = -1.0
+    masterlabel = "_lS" + str(lbdaS) + "_lL" + str(lbdaL)
+    if DoSpecIndexMap: 
+        masterlabel += "_lTSValpha" + str(lbdaTSValpha)
     if Grid:
         dogrid = '-g ' + str(nCores4Gridding)
-        masterlabel = "_lS" + str(lbdaS) + "_lL" + str(lbdaL)
         if GridRobust:
             dogrid += ' -R ' + GridRobust
     else:
         dogrid = ''
-        masterlabel = "_lS" + str(lbdaS) + "_lL" + str(lbdaL) + "_nogrid"
+        masterlabel += "_nogrid"
 
     hdu_canvas = fits.open('mod_in_0.fits')
     hdr_canvas = hdu_canvas[0].header
     reffreq = '-F ' + str(hdr_canvas['CRVAL3'])
-
-
-        
 
     defaultvalues = str(MINPIX) + ',' + str(defaultspecindex)
 
@@ -114,12 +115,17 @@ def exec_arun(sourcems,
     elif UVtaper:
         path_to_guvmem = '/home/simon/bin/gpuvmem_uvtaper/bin/gpuvmem'
         masterlabel += "_uvtaper"
-    elif wAlpha:
+    elif DoSpecIndexMap:
         masterlabel += "_wAlpha"
-        path_to_guvmem = '/home/simon/bin/gpuvmem_wAlpha/bin/gpuvmem'
+        path_to_guvmem = '/home/simon/bin/gpuvmem_specindex/gpuvmem/bin/gpuvmem'
+        
     else:
         path_to_guvmem = '/home/simon/bin/gpuvmem/bin/gpuvmem'
 
+    if DoSpecIndexMap:
+        specindexflags = '-S ' + str(specindexnoise)
+    else:
+        specindexflags = ''
     if PositivDefinit:
         positivflag = ''
     else:
@@ -143,9 +149,9 @@ def exec_arun(sourcems,
 
         command = path_to_guvmem + " -X 16 -Y 16 -V 256 " + dogrid + " -i " + sourcems + " -o " + workdir + "/out_res_ms " + noisecutstr + " -m mod_in_0.fits -p " + workdir + "/ -O " + workdir + "/mod_out.fits " + graphic_cards + " -z " + defaultvalues + " -Z " + str(
             lbdaS
-        ) + "," + str(lbdaL) + " -t " + str(MaxNiter) + " --verbose -e " + str(
+        ) + ",0,0," + str(lbdaL) +"," + str(lbdaTSValpha) + " -t " + str(MaxNiter) + " --verbose -e " + str(
             eta
-        ) + " " + reffreq + " " + positivflag + " " + printflag + " " + savemodel
+        ) + " " + reffreq + " " + specindexflags + " " + positivflag + " " + printflag + " " + savemodel
 
         if DoMask:
             if CheckMask:
