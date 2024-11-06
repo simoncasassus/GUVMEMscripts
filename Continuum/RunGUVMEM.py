@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 
 load_path_4scripts = os.environ[
-    'HOME'] + '/common/python/include/GUVMEMscripts/Continuum/'
+    'HOME'] + '/gitcommon/GUVMEMscripts/Continuum/'
 
 
 def docanvas(sourcems,
@@ -16,14 +16,14 @@ def docanvas(sourcems,
              nyin,
              cellsize,
              robustparam,
+             phasecenter='',
              NoiseFromTcleanResiduals=False,
              ManualNoise=False,
              NoiseFactor=False):
 
-    #fields='0'  # no los pesca
     os.system('casa --log2term --nogui -c ' + load_path_4scripts +
               'make_canvas.py' + ' ' + sourcems + ' ' + cellsize + ' ' +
-              str(nxin) + ' ' + str(nyin) + ' ' + robustparam)
+              str(nxin) + ' ' + str(nyin) + ' ' + robustparam+' '+phasecenter)
 
     data_canvas = fits.open('autoclean.fits')
     print(data_canvas.info())
@@ -70,6 +70,7 @@ def exec_arun(sourcems,
               PositivDefinit=True,
               MaxNiter=80,
               XtraNameTag='',
+              phasecenter='',
               nCores4Gridding=10,
               GridRobust=False,
               noisecut=2.,
@@ -117,7 +118,7 @@ def exec_arun(sourcems,
         masterlabel += "_uvtaper"
     elif DoSpecIndexMap:
         masterlabel += "_wAlpha"
-        path_to_guvmem = '/home/simon/bin/gpuvmem_specindex/gpuvmem/bin/gpuvmem'
+        path_to_guvmem = '/home/simon/bin/gpuvmem_specindex/gpuvmem/bin/gpuvmem' # '/home/simon/bin/gpuvmem_specindex/gpuvmem/bin/gpuvmem'
         
     else:
         path_to_guvmem = '/home/simon/bin/gpuvmem/bin/gpuvmem'
@@ -126,6 +127,7 @@ def exec_arun(sourcems,
         specindexflags = '-S ' + str(specindexnoise)
     else:
         specindexflags = ''
+
     if PositivDefinit:
         positivflag = ''
     else:
@@ -160,24 +162,24 @@ def exec_arun(sourcems,
                 hdr_canvas = hdu_canvas[0].header
                 hdu_mask = fits.open(maskname)
                 hdr_mask = hdu_mask[0].header
-                if ((np.fabs((hdr_mask['CDELT2'] - hdr_canvas['CDELT2']) /
-                             hdr_canvas['CDELT2']) < 1E-3) |
-                    (hdr_mask['NAXIS1'] != hdr_canvas['NAXIS1'])):
-                    exec_maskresamp_script = Path(
-                        __file__).parent / "exec_mask_resamp.bash"
-                    mask_basename = os.path.basename(maskname)
-                    mask_basename = re.sub('.fits', '_resamp.fits',
-                                           mask_basename, re.IGNORECASE)
-                    full_path_mask = os.path.join(os.path.dirname(maskname),
-                                                  mask_basename)
-                    print(
-                        "resampling input mask: ", "bash " +
-                        str(exec_maskresamp_script) + " mod_in_0.fits" + " " +
-                        maskname + " " + full_path_mask)
-                    os.system("bash " + str(exec_maskresamp_script) +
-                              " mod_in_0.fits" + " " + maskname + " " +
-                              full_path_mask)
-                    maskname = full_path_mask
+                #if ((np.fabs((hdr_mask['CDELT2'] - hdr_canvas['CDELT2']) /
+                #             hdr_canvas['CDELT2']) < 1E-3) |
+                #    (hdr_mask['NAXIS1'] != hdr_canvas['NAXIS1'])):
+                exec_maskresamp_script = Path(
+                    __file__).parent / "exec_mask_resamp.bash"
+                mask_basename = os.path.basename(maskname)
+                mask_basename = re.sub('.fits', '_resamp.fits',
+                                       mask_basename, re.IGNORECASE)
+                full_path_mask = os.path.join(os.path.dirname(maskname),
+                                              mask_basename)
+                print(
+                    "resampling input mask: ", "bash " +
+                    str(exec_maskresamp_script) + " mod_in_0.fits" + " " +
+                    maskname + " " + full_path_mask)
+                os.system("bash " + str(exec_maskresamp_script) +
+                          " mod_in_0.fits" + " " + maskname + " " +
+                          full_path_mask)
+                maskname = full_path_mask
 
         if DoMask:
             command += ' -U ' + maskname
@@ -200,5 +202,8 @@ def exec_arun(sourcems,
         os.system("bash  exec_gpuvmem_command.bash")
 
     if DoRestore:
-        os.system("bash " + load_path_4scripts + "exec_restore.bash " +
-                  workdir + " " + robustparam + " " + load_path_4scripts)
+        #os.system("bash " + load_path_4scripts + "exec_restore.bash " +
+        #          workdir + " " + robustparam + " " + load_path_4scripts+' '+phasecenter)
+        os.system("rsync -va "+load_path_4scripts+"casarestore_4guvmem.py "+workdir)
+        os.system('cd '+workdir+'; casa --log2term --nogui -c casarestore_4guvmem.py '+robustparam+' '+phasecenter)
+

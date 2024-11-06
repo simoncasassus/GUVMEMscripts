@@ -20,7 +20,10 @@ nyin=sys.argv[4]
 
 robustparam=sys.argv[5]
 
-
+if len(sys.argv) > 6:
+    phasecenter= sys.argv[6]
+else:
+    phasecenter=''
 listobs(sourcems,listfile='list_inputms.txt',overwrite=True)
 
 
@@ -32,8 +35,9 @@ tclean(vis=sourcems,
        specmode='mfs',
        niter=0,  
        interactive=False,
+       phasecenter=phasecenter,
        cell=cellsize,
-       deconvolver='hogbom',
+       #deconvolver='hogbom',
        imsize=[int(nxin),int(nyin)],
        robust=float(robustparam),
        weighting='briggs')
