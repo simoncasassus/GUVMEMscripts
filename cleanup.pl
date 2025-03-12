@@ -40,7 +40,7 @@ sub wanted {
 	($abasename =~ /^mem_l.*chan_?\d+$/) |
 	($abasename =~ /^I_nu_0_\d+\.fits$/) |
 	($abasename =~ /^alpha_\d+\.fits$/) |
-	($abasename =~ /^out_res_ms$/) |
+	#($abasename =~ /^out_res_ms$/) |
 	($fullfilename =~ /.*uvmem.*casa.*.log$/) )
     {
 	if ($args =~ /l/) {
